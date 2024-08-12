@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tasks Manager</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* General Styles */
+      body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #597c98; /* Background color */
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .container {
+        margin-top: 20px;
+        width: 100%;
+        max-width: 1200px;
+      }
+
+      /* Task Form Container */
+      .task-form-container {
+        background-color: #ffffff; /* White background */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Table Container */
+      .table-container {
+        margin-top: 40px;
+      }
+
+      /* Table Styles */
+      table {
+        margin-top: 20px;
+      }
+
+      /* Heading Styles */
+      h1 {
+        color:   #000000;; /* Matching color scheme */
+        margin-bottom: 20px;
+        font-size: 28px;
+        text-align: center;
+      }
+
+      h2 {
+        color: #97569a; /* Matching color scheme */
+        margin-bottom: 20px;
+      }
+
+      /* Button Styles */
+      .btn-primary {
+        background-color: #97569a; /* Primary button color */
+        color: #ffffff;
+        border: none;
+        padding: 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 18px;
+        transition: background-color 0.3s;
+      }
+
+      .btn-primary:hover {
+        background-color: #7d4c6c; /* Hover color */
+      }
+
+      .btn-secondary {
+        background-color: #f0f0f0; /* Secondary button color */
+        color: #000000;
+        border: none;
+        padding: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+      }
+
+      .btn-secondary:hover {
+        background-color: #e0e0e0; /* Hover color */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="mb-4"><b>Tasks Manager</b></h1>
+
+      <!-- Add Task Form -->
+      <div class="task-form-container">
+        <h2><b>Add Task</b></h2>
+        <form id="add-task-form">
+          <div class="form-group">
+            <label for="task-title">Title</label>
+            <input
+              type="text"
+              class="form-control"
+              id="task-title"
+              placeholder="Task Title"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="task-description">Description</label>
+            <textarea
+              class="form-control"
+              id="task-description"
+              rows="3"
+              placeholder="Task Description"
+            ></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Add Task</button>
+        </form>
+      </div>
+
+      <!-- Load Tasks Button -->
+      <button id="load-tasks" class="btn btn-secondary mt-3">Load Tasks</button>
+
+      <!-- Tasks Table -->
+      <div class="table-container">
+        <table class="table table-striped mt-3" id="tasks-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Priority</th>
+              <th>Date Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tasks-body">
+            <!-- Tasks will be loaded here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      const apiUrl = "https://protected-citadel-28892-9b3d80cc590b.herokuapp.com";
+      const token = localStorage.getItem("token");
+
+      document
+        .getElementById("add-task-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const title = document.getElementById("task-title").value;
+          const description = document.getElementById("task-description").value;
+
+          try {
+            const response = await fetch(`${apiUrl}/api/tasks`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({ title, description }),
+            });
+
+            if (response.ok) {
+              alert("Task added successfully");
+              document.getElementById("add-task-form").reset();
+              loadTasks(); // Refresh the task list
+            } else {
+              alert("Error adding task");
+            }
+          } catch (error) {
+            console.error("Error:", error);
+            alert("Error adding task");
+          }
+        });
+
+      document.getElementById("load-tasks").addEventListener("click", () => {
+        loadTasks();
+      });
+
+      async function loadTasks() {
+        try {
+          const response = await fetch(`${apiUrl}/api/tasks`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (response.ok) {
+            const tasks = await response.json();
+            const tasksBody = document.getElementById("tasks-body");
+            tasksBody.innerHTML = ""; // Clear existing tasks
+
+            tasks.forEach((task, index) => {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                            <td>${index + 1}</td>
+                            <td>${task.title}</td>
+                            <td>${task.description}</td>
+                            <td>${task.priority}</td>
+                            <td>${new Date(
+                              task.created_at
+                            ).toLocaleString()}</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm mr-2" onclick="editTask('${
+                                  task.id
+                                }')">Edit</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteTask('${
+                                  task.id
+                                }')">Delete</button>
+                            </td>
+                        `;
+              tasksBody.appendChild(row);
+            });
+          } else {
+            alert("Error loading tasks");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Error loading tasks");
+        }
+      }
+
+      async function editTask(taskId) {
+        const title = prompt("Enter new title:");
+        const description = prompt("Enter new description:");
+
+        if (title && description) {
+          try {
+            const response = await fetch(`${apiUrl}/api/tasks/${taskId}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({ title, description }),
+            });
+
+            if (response.ok) {
+              alert("Task updated successfully");
+              loadTasks(); // Refresh the task list
+            } else {
+              const errorData = await response.json();
+              console.error("Error updating task:", errorData);
+            }
+          } catch (error) {
+            console.error("Error:", error);
+          }
+        } else {
+          alert("Both title and description are required.");
+        }
+      }
+
+      async function deleteTask(taskId) {
+        if (confirm("Are you sure you want to delete this task?")) {
+          try {
+            const response = await fetch(`${apiUrl}/api/tasks/${taskId}`, {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+
+            if (response.ok) {
+              alert("Task deleted successfully");
+              loadTasks(); // Refresh the task list
+            } else {
+              alert("Error deleting task");
+            }
+          } catch (error) {
+            console.error("Error:", error);
+            alert("Error deleting task");
+          }
+        }
+      }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>

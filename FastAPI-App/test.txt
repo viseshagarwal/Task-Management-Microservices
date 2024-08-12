@@ -1,0 +1,76 @@
+ % curl -X GET "https://your-fastapi-app.herokuapp.com/tasks/" \
+     -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImV4cCI6MTcyMzM4NjUwOX0.lpCf-nbFKJj8MPME-2d-2dZpSCgp2KPalnAtB253Hvs "
+
+
+curl -X POST "https://secret-woodland-62864-9a8c48b1742f.herokuapp.com/" \
+     -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImV4cCI6MTcyMzM4NjUwOX0.lpCf-nbFKJj8MPME-2d-2dZpSCgp2KPalnAtB253Hvs " \
+     -H "Content-Type: application/json" \
+     -d '{"title": "Integration Test Task", "description": "Integration Test Description"}'
+
+
+curl -X GET "https://protected-citadel-28892-9b3d80cc590b.herokuapp.com/" \
+      -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImV4cCI6MTcyMzM4NjUwOX0.lpCf-nbFKJj8MPME-2d-2dZpSCgp2KPalnAtB253Hvs "
+
+curl -X POST "https://protected-citadel-28892-9b3d80cc590b.herokuapp.com/" \
+     -H "Authorization: Bearer <YOUR_TOKEN>" \
+     -H "Content-Type: application/json" \
+     -d '{"title": "Test Task", "description": "Test Description"}'
+
+
+
+curl -X POST "https://secret-woodland-62864-9a8c48b1742f.herokuapp.com/tasks/" \
+    -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImV4cCI6MTcyMzM4NjUwOX0.lpCf-nbFKJj8MPME-2d-2dZpSCgp2KPalnAtB253Hvs " \
+    -H "Content-Type: application/json" \
+    -d '{ "title": "New Task", "description": "This is a new task" }'
+
+
+curl -X POST https://protected-citadel-28892-9b3d80cc590b.herokuapp.com/api/tasks \
+    -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImV4cCI6MTcyMzM4NjUwOX0.lpCf-nbFKJj8MPME-2d-2dZpSCgp2KPalnAtB253Hvs "
+
+
+
+
+
+
+
+
+
+
+
+curl -X POST "https://secret-woodland-62864-9a8c48b1742f.herokuapp.com/token" \
+-H "Content-Type: application/x-www-form-urlencoded" \
+-d "username=visesh&password=visesh"
+
+curl -X POST "https://secret-woodland-62864-9a8c48b1742f.herokuapp.com/tasks/" \
+-H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aXNlc2giLCJleHAiOjE3MjMzOTIwOTJ9.l-h2PVG0c5INIW3UuFWr8gwTw7VJLFIAZo9EnO8Oo_8" \
+-H "Content-Type: application/json" \
+-d '{
+    "title": "Test Task",
+    "description": "This is a test task",
+    "completed": false,
+    "priority": "high",
+    "deadline": "2024-08-20T00:00:00"
+}'
+
+
+curl -X POST "https://secret-woodland-62864-9a8c48b1742f.herokuapp.com/tasks/66b8dc0c04bafed5cb8c263a" \
+-H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aXNlc2giLCJleHAiOjE3MjMzOTIwOTJ9.l-h2PVG0c5INIW3UuFWr8gwTw7VJLFIAZo9EnO8Oo_8" \
+
+
+curl -X POST "https://protected-citadel-28892-9b3d80cc590b.herokuapp.com/create-task" \
+-H "Content-Type: application/json" \
+-d '{
+    "title": "Node.js Test Task",
+    "description": "Task created from Node.js service",
+    "priority": "low",
+    "deadline": "2024-08-30T00:00:00"
+}'
+
+
+
+curl -X POST http://localhost:3000/api/tasks -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aXNlc2giLCJleHAiOjE3MjMzOTIwOTJ9.l-h2PVG0c5INIW3UuFWr8gwTw7VJLFIAZo9EnO8Oo_8" -H "Content-Type: application/json" -d '{"title": "New Task", "description": "Task Description"}'
+
+curl -X GET http://localhost:3000/api/tasks -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aXNlc2giLCJleHAiOjE3MjMzOTU0Nzh9.nY0pSjNBNZWvQvJGptK3abmgt_EPUJqWEXOtumrvUsI"
+
+curl -X GET https://protected-citadel-28892-9b3d80cc590b.herokuapp.com/api/tasks -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aXNlc2giLCJleHAiOjE3MjMzOTU0Nzh9.nY0pSjNBNZWvQvJGptK3abmgt_EPUJqWEXOtumrvUsI"
+

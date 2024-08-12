@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - FastAPI Task Manager</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* General Styles */
+      html,
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #587892;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* Container Styles */
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .login-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        padding: 40px;
+        max-width: 1000px; /* Adjust based on your preference */
+        width: 100%;
+      }
+
+      .login-container {
+        flex: 1;
+        max-width: 500px;
+        text-align: center;
+      }
+
+      .login-container h1 {
+        font-size: 28px;
+        color: #97569a;
+        margin-bottom: 30px;
+      }
+
+      .login-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .login-form .form-group {
+        margin-bottom: 0;
+      }
+
+      .login-form input {
+        font-size: 20px;
+        color: #4a4a4a;
+        padding: 16px;
+        border: 1px solid #dcdcdc;
+        border-radius: 8px;
+      }
+
+      .login-form button {
+        background-color: #97569a;
+        color: #ffffff;
+        border: none;
+        padding: 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 18px;
+        transition: background-color 0.3s;
+      }
+
+      .login-form button:hover {
+        background-color: #7d4c6c;
+      }
+
+      .btn-secondary {
+        background-color: #6c757d;
+        color: #ffffff;
+      }
+
+      .btn-secondary:hover {
+        background-color: #5a6268;
+      }
+
+      .image-container {
+        flex: 1;
+        max-width: 400px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .image-container img {
+        max-width: 100%;
+        border-radius: 15px;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="login-wrapper">
+        <div class="login-container">
+          <h1>Login</h1>
+          <form id="login-form" class="login-form">
+            <div class="form-group">
+              <input
+                type="text"
+                id="login-username"
+                class="form-control"
+                placeholder="Username"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <input
+                type="password"
+                id="login-password"
+                class="form-control"
+                placeholder="Password"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+          </form>
+          <p></p>
+          <p><a href="index.html" class="btn btn-secondary">Back to Home</a></p>
+        </div>
+        <div class="image-container">
+          <img src="login.jpg" alt="Login Image" />
+        </div>
+      </div>
+    </div>
+    <script>
+      const apiUrl = "https://secret-woodland-62864-9a8c48b1742f.herokuapp.com";
+
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const username = document.getElementById("login-username").value;
+          const password = document.getElementById("login-password").value;
+
+          const response = await fetch(`${apiUrl}/token`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              username,
+              password,
+            }),
+          });
+
+          const result = await response.json();
+          localStorage.setItem("token", result.access_token);
+          alert("Login successful");
+          window.location.href = "tasks.html";
+        });
+    </script>
+  </body>
+</html>
