@@ -24,7 +24,9 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "mysecretkey"  # Replace with your secret key
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-    MONGO_DETAILS: str = ()
+    MONGO_DETAILS: str = (
+        f"mongodb+srv://{encoded_username}:{encoded_password}@cluster0.xyz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    )
 
 
 settings = Settings()
